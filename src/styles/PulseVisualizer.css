@@ -1,0 +1,405 @@
+/* AI Response Pulse Visualizer Styles */
+.pulse-visualizer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.pulse-visualizer.thinking,
+.pulse-visualizer.streaming,
+.pulse-visualizer.complete {
+  opacity: 1;
+}
+
+/* Main pulse rings */
+.pulse-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 2px solid;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse-expand infinite ease-out;
+}
+
+.pulse-ring-1 {
+  width: 40px;
+  height: 40px;
+  border-color: var(--neon-cyan, #00f0ff);
+  box-shadow: 
+    0 0 10px var(--neon-cyan, #00f0ff),
+    inset 0 0 10px var(--neon-cyan, #00f0ff);
+}
+
+.pulse-ring-2 {
+  width: 80px;
+  height: 80px;
+  border-color: var(--neon-green, #39ff14);
+  box-shadow: 
+    0 0 15px var(--neon-green, #39ff14),
+    inset 0 0 15px var(--neon-green, #39ff14);
+  animation-delay: -0.5s;
+}
+
+.pulse-ring-3 {
+  width: 120px;
+  height: 120px;
+  border-color: var(--neon-pink, #ff10f0);
+  box-shadow: 
+    0 0 20px var(--neon-pink, #ff10f0),
+    inset 0 0 20px var(--neon-pink, #ff10f0);
+  animation-delay: -1s;
+}
+
+/* Central core */
+.pulse-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    var(--neon-cyan, #00f0ff) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: core-pulse 1s infinite alternate;
+}
+
+.core-inner {
+  width: 100%;
+  height: 100%;
+  background: var(--neon-cyan, #00f0ff);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 15px var(--neon-cyan, #00f0ff),
+    0 0 30px var(--neon-cyan, #00f0ff);
+  animation: core-glow 2s infinite alternate;
+}
+
+/* Neural particles */
+.neural-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--particle-size);
+  height: var(--particle-size);
+  background: var(--particle-color);
+  border-radius: 50%;
+  transform-origin: 0 0;
+  animation: 
+    particle-orbit 3s infinite linear var(--particle-delay),
+    particle-pulse 1s infinite alternate;
+  box-shadow: 0 0 8px var(--particle-color);
+}
+
+/* Completion effects */
+.completion-burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    var(--neon-green, #39ff14) 0%,
+    var(--neon-cyan, #00f0ff) 50%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: completion-burst 0.8s ease-out;
+}
+
+.completion-shockwave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  border: 3px solid var(--neon-green, #39ff14);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: shockwave-expand 1.2s ease-out;
+}
+
+.completion-sparkle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  background: var(--neon-pink, #ff10f0);
+  transform-origin: 0 0;
+  animation: sparkle-burst 1s ease-out var(--sparkle-delay);
+  box-shadow: 0 0 6px var(--neon-pink, #ff10f0);
+}
+
+/* Data flow lines for streaming */
+.data-flow-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.data-flow-line {
+  position: absolute;
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--neon-cyan, #00f0ff) 50%,
+    transparent 100%
+  );
+  transform-origin: 50% 0;
+  transform: rotate(var(--flow-angle)) translateY(-30px);
+  animation: data-flow 1s infinite ease-in-out;
+  box-shadow: 0 0 4px var(--neon-cyan, #00f0ff);
+}
+
+/* Neural grid for thinking */
+.neural-grid {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  transform: translate(-50%, -50%);
+  opacity: 0.6;
+}
+
+.grid-line {
+  position: absolute;
+  background: var(--neon-green, #39ff14);
+  box-shadow: 0 0 2px var(--neon-green, #39ff14);
+}
+
+.grid-horizontal {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  animation: grid-pulse 2s infinite alternate;
+}
+
+.grid-vertical {
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  animation: grid-pulse 2s infinite alternate 0.5s;
+}
+
+.grid-diagonal-1 {
+  top: 0;
+  left: 0;
+  width: 141px; /* sqrt(100^2 + 100^2) */
+  height: 1px;
+  transform-origin: 0 0;
+  transform: rotate(45deg);
+  animation: grid-pulse 2s infinite alternate 1s;
+}
+
+.grid-diagonal-2 {
+  top: 0;
+  right: 0;
+  width: 141px;
+  height: 1px;
+  transform-origin: 100% 0;
+  transform: rotate(-45deg);
+  animation: grid-pulse 2s infinite alternate 1.5s;
+}
+
+/* Keyframe animations */
+@keyframes pulse-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes core-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+@keyframes core-glow {
+  0% {
+    box-shadow: 
+      0 0 15px var(--neon-cyan, #00f0ff),
+      0 0 30px var(--neon-cyan, #00f0ff);
+  }
+  100% {
+    box-shadow: 
+      0 0 25px var(--neon-cyan, #00f0ff),
+      0 0 50px var(--neon-cyan, #00f0ff);
+  }
+}
+
+@keyframes particle-orbit {
+  from {
+    transform: translate(-50%, -50%) rotate(var(--particle-angle)) translateX(50px) rotate(calc(-1 * var(--particle-angle)));
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(calc(var(--particle-angle) + 360deg)) translateX(50px) rotate(calc(-1 * (var(--particle-angle) + 360deg)));
+  }
+}
+
+@keyframes particle-pulse {
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes completion-burst {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes shockwave-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(5);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkle-burst {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--sparkle-angle)) translateX(0) scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(var(--sparkle-angle)) translateX(40px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(var(--sparkle-angle)) translateX(80px) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes data-flow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: rotate(var(--flow-angle)) translateY(-30px) scaleY(1);
+  }
+  50% {
+    opacity: calc(0.8 * var(--flow-intensity, 0.5));
+    transform: rotate(var(--flow-angle)) translateY(-30px) scaleY(1.5);
+  }
+}
+
+@keyframes grid-pulse {
+  0% {
+    opacity: 0.3;
+    box-shadow: 0 0 2px var(--neon-green, #39ff14);
+  }
+  100% {
+    opacity: 0.8;
+    box-shadow: 0 0 8px var(--neon-green, #39ff14);
+  }
+}
+
+/* Streaming state intensification */
+.pulse-visualizer.streaming .pulse-ring {
+  animation-timing-function: ease-in-out;
+}
+
+.pulse-visualizer.streaming .neural-particle {
+  animation-duration: 2s, 0.5s;
+}
+
+.pulse-visualizer.streaming .core-inner {
+  animation-duration: 0.8s;
+}
+
+/* Thinking state moderation */
+.pulse-visualizer.thinking .pulse-ring {
+  animation-duration: 3s !important;
+  opacity: 0.7;
+}
+
+.pulse-visualizer.thinking .neural-particle {
+  animation-duration: 4s, 1.5s;
+  opacity: 0.6;
+}
+
+/* Complete state celebration */
+.pulse-visualizer.complete .pulse-ring {
+  animation: pulse-expand 0.6s ease-out;
+}
+
+.pulse-visualizer.complete .core-inner {
+  animation: completion-burst 0.8s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .pulse-visualizer {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .pulse-ring-1 {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .pulse-ring-2 {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .pulse-ring-3 {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .data-flow-line {
+    height: 40px;
+    transform: rotate(var(--flow-angle)) translateY(-20px);
+  }
+  
+  .neural-grid {
+    width: 80px;
+    height: 80px;
+  }
+}
