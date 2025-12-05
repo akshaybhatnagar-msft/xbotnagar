@@ -1,0 +1,3 @@
+# Completed Features
+# Format: feature-id (one per line)
+# This file tracks which features have been autonomously implemented
