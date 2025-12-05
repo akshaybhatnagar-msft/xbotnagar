@@ -303,7 +303,14 @@ Provide COMPLETE file contents, not diffs or snippets."""
 
         result = tool_use.input
         logger.info(f"Tool use result keys: {list(result.keys())}")
-        logger.info(f"Tool use result: {str(result)[:500]}")
+        logger.info(f"Tool use result (first 500 chars): {str(result)[:500]}")
+
+        # Check if result is empty or invalid
+        if not result or 'files' not in result:
+            logger.error("Tool call returned empty or invalid result")
+            logger.error(f"Full response content: {[str(c)[:200] for c in response.content]}")
+            logger.error(f"Stop reason: {response.stop_reason}")
+            raise ValueError(f"Invalid tool call result - stop_reason: {response.stop_reason}")
 
         # Write files
         for file_data in result['files']:
