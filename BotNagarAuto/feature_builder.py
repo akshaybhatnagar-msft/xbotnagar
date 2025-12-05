@@ -96,7 +96,7 @@ def ensure_clean_state():
     """Ensure we're on main branch and up to date"""
     logger.info("Ensuring clean git state...")
     run_command("git checkout main")
-    run_command("git pull origin main")
+    run_command("git pull origin main --rebase")
     logger.info("✓ On main branch and up to date")
 
 
@@ -433,7 +433,7 @@ Powered by Claude Sonnet 4"""
 
     # Return to main
     run_command("git checkout main")
-    run_command("git pull origin main")
+    run_command("git pull origin main --rebase")
     logger.info("✓ Returned to main branch")
 
 
