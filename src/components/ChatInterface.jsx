@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import MessageRenderer from './MessageRenderer';
 import PulseVisualizer from './PulseVisualizer';
+import NeuralTypingIndicator from './NeuralTypingIndicator';
 import './ChatInterface.css';
 
 function ChatInterface() {
@@ -16,12 +17,17 @@ function ChatInterface() {
   const [isComplete, setIsComplete] = useState(false);
   const [streamingIntensity, setStreamingIntensity] = useState(0.5);
   
+  // Neural Typing Indicator states
+  const [showNeuralIndicator, setShowNeuralIndicator] = useState(false);
+  const [responseComplexity, setResponseComplexity] = useState(0.5);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  
   const messagesEndRef = useRef(null);
   const lastMessageLengthRef = useRef(0);
 
   // Glitch effect for title
   useEffect(() => {
-    const glitchChars = '▓▒░█▄▀▐│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌';
+    const glitchChars = '█▓▒░▄▀▐│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌';
     const originalText = 'BOTNAGAR';
 
     const glitch = () => {
@@ -50,6 +56,34 @@ function ChatInterface() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Calculate response complexity based on input characteristics
+  const calculateResponseComplexity = (inputText) => {
+    let complexity = 0.3; // Base complexity
+    
+    // Length factor
+    complexity += Math.min(0.3, inputText.length / 500);
+    
+    // Code-related keywords increase complexity
+    const codeKeywords = ['code', 'function', 'algorithm', 'debug', 'implement', 'create', 'build'];
+    const hasCodeKeywords = codeKeywords.some(keyword => 
+      inputText.toLowerCase().includes(keyword)
+    );
+    if (hasCodeKeywords) complexity += 0.3;
+    
+    // Technical terms increase complexity
+    const techKeywords = ['api', 'database', 'neural', 'machine learning', 'quantum', 'blockchain'];
+    const hasTechKeywords = techKeywords.some(keyword => 
+      inputText.toLowerCase().includes(keyword)
+    );
+    if (hasTechKeywords) complexity += 0.2;
+    
+    // Question marks suggest analytical thinking
+    const questionMarks = (inputText.match(/\?/g) || []).length;
+    complexity += Math.min(0.2, questionMarks * 0.1);
+    
+    return Math.min(1, complexity);
+  };
+
   const handleSendMessage = async (text = input) => {
     if (!text.trim() || isLoading) return;
 
@@ -58,10 +92,15 @@ function ChatInterface() {
     setInput('');
     setIsLoading(true);
     
-    // Start thinking animation
+    // Calculate complexity for this request
+    const complexity = calculateResponseComplexity(text);
+    setResponseComplexity(complexity);
+    
+    // Start animations - Neural indicator for initial processing
     setIsThinking(true);
     setIsStreaming(false);
     setIsComplete(false);
+    setShowNeuralIndicator(true);
     lastMessageLengthRef.current = 0;
 
     try {
@@ -99,8 +138,9 @@ function ChatInterface() {
             try {
               const parsed = JSON.parse(data);
               if (parsed.text) {
-                // Transition from thinking to streaming on first content
+                // Transition from neural indicator to pulse visualizer on first content
                 if (isFirstChunk) {
+                  setShowNeuralIndicator(false);
                   setIsThinking(false);
                   setIsStreaming(true);
                   isFirstChunk = false;
@@ -142,11 +182,14 @@ function ChatInterface() {
         { role: 'assistant', content: 'Sorry, there was an error processing your request.' }
       ]);
       // Show error state briefly
+      setShowNeuralIndicator(false);
       setIsThinking(false);
       setIsStreaming(false);
       setIsComplete(true);
     } finally {
       setIsLoading(false);
+      setShowNeuralIndicator(false);
+      
       // Reset pulse visualizer after a delay
       setTimeout(() => {
         setIsThinking(false);
@@ -193,6 +236,11 @@ function ChatInterface() {
     document.querySelector('.message-input')?.focus();
   };
 
+  // Toggle sound for neural indicator
+  const toggleSound = () => {
+    setSoundEnabled(!soundEnabled);
+  };
+
   return (
     <div className="chat-interface">
       <div className="scanline"></div>
@@ -210,8 +258,16 @@ function ChatInterface() {
           </div>
           <h1 className="chat-title" data-text={glitchText}>{glitchText}</h1>
           <div className="subtitle-wrapper">
-            <span className="cursor-blink">▓</span>
+            <span className="cursor-blink">█</span>
             <p className="chat-subtitle">SONNET-4.5 // NEURAL SESSION</p>
+            {/* Sound toggle button */}
+            <button 
+              className={`sound-toggle ${soundEnabled ? 'enabled' : ''}`}
+              onClick={toggleSound}
+              title={`Sound ${soundEnabled ? 'ON' : 'OFF'}`}
+            >
+              {soundEnabled ? '🔊' : '🔇'}
+            </button>
           </div>
         </div>
 
@@ -258,7 +314,18 @@ function ChatInterface() {
                   </div>
                 </div>
               ))}
-              {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
+              
+              {/* Neural Typing Indicator - shows during initial AI processing */}
+              {showNeuralIndicator && (
+                <NeuralTypingIndicator 
+                  isVisible={showNeuralIndicator}
+                  complexity={responseComplexity}
+                  soundEnabled={soundEnabled}
+                />
+              )}
+              
+              {/* Legacy typing indicator for compatibility */}
+              {isLoading && !showNeuralIndicator && messages[messages.length - 1]?.role !== 'assistant' && (
                 <div className="message assistant">
                   <div className="message-avatar">AI</div>
                   <div className="message-content">
@@ -323,6 +390,12 @@ function ChatInterface() {
           <span className="status-text">SYSTEM_ONLINE</span>
           <span className="divider">|</span>
           <span className="latency">LATENCY: ~50ms</span>
+          {showNeuralIndicator && (
+            <>
+              <span className="divider">|</span>
+              <span className="neural-status">NEURAL_ACTIVE</span>
+            </>
+          )}
         </div>
       </div>
 
