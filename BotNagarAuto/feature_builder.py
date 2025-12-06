@@ -285,7 +285,7 @@ Provide COMPLETE file contents, not diffs or snippets."""
     try:
         response = client.messages.create(
             model=MODEL,
-            max_tokens=16000,  # Increased for larger file contents
+            max_tokens=32000,  # Increased significantly for larger file contents
             messages=[{"role": "user", "content": prompt}],
             tools=tools,
             tool_choice={"type": "tool", "name": "write_files"}
