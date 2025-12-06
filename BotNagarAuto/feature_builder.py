@@ -283,13 +283,15 @@ Provide COMPLETE file contents, not diffs or snippets."""
     }]
 
     try:
-        response = client.messages.create(
+        # Use streaming for large responses
+        with client.messages.stream(
             model=MODEL,
             max_tokens=32000,  # Increased significantly for larger file contents
             messages=[{"role": "user", "content": prompt}],
             tools=tools,
             tool_choice={"type": "tool", "name": "write_files"}
-        )
+        ) as stream:
+            response = stream.get_final_message()
 
         # Extract tool use from response
         tool_use = None
