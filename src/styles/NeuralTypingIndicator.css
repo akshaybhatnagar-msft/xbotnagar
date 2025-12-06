@@ -1,0 +1,418 @@
+/* Neural Typing Indicator Styles */
+
+.neural-typing-indicator {
+  position: relative;
+  width: 100%;
+  min-height: 120px;
+  background: rgba(0, 20, 40, 0.95);
+  border: 1px solid #00f0ff;
+  border-radius: 4px;
+  margin: 16px 0;
+  padding: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  overflow: hidden;
+  box-shadow: 
+    0 0 20px rgba(0, 240, 255, 0.3),
+    inset 0 0 20px rgba(0, 240, 255, 0.1);
+  animation: neural-container-pulse 4s ease-in-out infinite;
+}
+
+@keyframes neural-container-pulse {
+  0%, 100% { 
+    border-color: #00f0ff;
+    box-shadow: 
+      0 0 20px rgba(0, 240, 255, 0.3),
+      inset 0 0 20px rgba(0, 240, 255, 0.1);
+  }
+  33% { 
+    border-color: #39ff14;
+    box-shadow: 
+      0 0 20px rgba(57, 255, 20, 0.3),
+      inset 0 0 20px rgba(57, 255, 20, 0.1);
+  }
+  66% { 
+    border-color: #ff10f0;
+    box-shadow: 
+      0 0 20px rgba(255, 16, 240, 0.3),
+      inset 0 0 20px rgba(255, 16, 240, 0.1);
+  }
+}
+
+/* Background Effects */
+.neural-bg-effects {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.neural-scanline {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #00f0ff 50%,
+    transparent 100%
+  );
+  top: 0;
+  animation: neural-scanline 3s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes neural-scanline {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.neural-noise {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
+  background-size: 10px 10px;
+  animation: neural-noise 0.5s infinite;
+  opacity: 0.3;
+}
+
+@keyframes neural-noise {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-1px, 1px); }
+  50% { transform: translate(1px, -1px); }
+  75% { transform: translate(-1px, -1px); }
+  100% { transform: translate(1px, 1px); }
+}
+
+/* Neural Network Visualization */
+.neural-network-container {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  margin-bottom: 20px;
+  z-index: 2;
+}
+
+.neural-network {
+  width: 100%;
+  height: 100%;
+}
+
+.neural-connection {
+  stroke-dasharray: 5, 3;
+  stroke-linecap: round;
+  animation: neural-flow 2s linear infinite;
+}
+
+@keyframes neural-flow {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 16;
+  }
+}
+
+.neural-node {
+  fill: #00f0ff;
+  animation: neural-node-pulse 2s ease-in-out infinite;
+}
+
+.neural-node:nth-child(3n+1) {
+  fill: #39ff14;
+}
+
+.neural-node:nth-child(3n+2) {
+  fill: #ff10f0;
+}
+
+@keyframes neural-node-pulse {
+  0%, 100% {
+    fill-opacity: 0.8;
+  }
+  50% {
+    fill-opacity: 1;
+  }
+}
+
+.neural-node-glow {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  opacity: 0.6;
+  animation: neural-glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes neural-glow-pulse {
+  0%, 100% {
+    stroke-opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    stroke-opacity: 0.8;
+    transform: scale(1.2);
+  }
+}
+
+.neural-node-pulse {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-opacity: 0.8;
+}
+
+/* Status Text Display */
+.neural-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #00f0ff;
+  letter-spacing: 1px;
+  z-index: 3;
+  position: relative;
+}
+
+.status-prefix {
+  color: #39ff14;
+  font-weight: 700;
+  text-shadow: 0 0 10px currentColor;
+}
+
+.status-text {
+  color: #00f0ff;
+  transition: all 0.2s ease;
+  text-shadow: 0 0 10px currentColor;
+  min-width: 200px;
+}
+
+.status-text.glitching {
+  animation: neural-text-glitch 0.15s ease-in-out;
+  color: #ff10f0;
+  text-shadow: 
+    -1px 0 0 #00f0ff,
+    1px 0 0 #39ff14,
+    0 0 10px currentColor;
+}
+
+@keyframes neural-text-glitch {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-2px) scaleX(0.98);
+  }
+  40% {
+    transform: translateX(2px) scaleX(1.02);
+  }
+  60% {
+    transform: translateX(-1px) scaleX(0.99);
+  }
+  80% {
+    transform: translateX(1px) scaleX(1.01);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.status-cursor {
+  color: #39ff14;
+  animation: neural-cursor-blink 1.2s infinite;
+  text-shadow: 0 0 10px currentColor;
+}
+
+@keyframes neural-cursor-blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+/* Circuit Pattern Overlay */
+.circuit-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.4;
+}
+
+.circuit-line {
+  position: absolute;
+  background: #00f0ff;
+  box-shadow: 0 0 4px currentColor;
+  animation: circuit-pulse 3s ease-in-out infinite;
+}
+
+.circuit-line.horizontal-1 {
+  width: 60px;
+  height: 1px;
+  top: 30%;
+  right: 20px;
+  animation-delay: 0s;
+}
+
+.circuit-line.horizontal-2 {
+  width: 40px;
+  height: 1px;
+  bottom: 30%;
+  left: 20px;
+  animation-delay: 1s;
+}
+
+.circuit-line.vertical-1 {
+  width: 1px;
+  height: 25px;
+  top: 20px;
+  right: 50px;
+  animation-delay: 0.5s;
+}
+
+.circuit-line.vertical-2 {
+  width: 1px;
+  height: 30px;
+  bottom: 10px;
+  left: 40px;
+  animation-delay: 1.5s;
+}
+
+@keyframes circuit-pulse {
+  0%, 100% {
+    background: #00f0ff;
+    box-shadow: 0 0 4px #00f0ff;
+  }
+  33% {
+    background: #39ff14;
+    box-shadow: 0 0 6px #39ff14;
+  }
+  66% {
+    background: #ff10f0;
+    box-shadow: 0 0 6px #ff10f0;
+  }
+}
+
+.circuit-node {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #39ff14;
+  border-radius: 50%;
+  box-shadow: 0 0 8px currentColor;
+  animation: circuit-node-pulse 2s ease-in-out infinite;
+}
+
+.circuit-node.node-1 {
+  top: 30%;
+  right: 80px;
+  animation-delay: 0s;
+}
+
+.circuit-node.node-2 {
+  bottom: 30%;
+  left: 60px;
+  animation-delay: 0.7s;
+}
+
+.circuit-node.node-3 {
+  top: 50%;
+  right: 30px;
+  animation-delay: 1.4s;
+}
+
+@keyframes circuit-node-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 8px #39ff14;
+  }
+  50% {
+    transform: scale(1.5);
+    box-shadow: 0 0 12px #39ff14, 0 0 20px rgba(57, 255, 20, 0.3);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .neural-typing-indicator {
+    min-height: 100px;
+    padding: 16px;
+  }
+  
+  .neural-network-container {
+    height: 60px;
+  }
+  
+  .neural-status {
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .status-text {
+    min-width: 150px;
+  }
+  
+  .circuit-line.horizontal-1,
+  .circuit-line.horizontal-2 {
+    width: 30px;
+  }
+  
+  .circuit-line.vertical-1,
+  .circuit-line.vertical-2 {
+    height: 15px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .neural-typing-indicator {
+    border-width: 2px;
+  }
+  
+  .neural-node,
+  .status-text,
+  .circuit-line {
+    filter: brightness(1.2);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .neural-typing-indicator,
+  .neural-connection,
+  .neural-node,
+  .neural-node-glow,
+  .neural-scanline,
+  .neural-noise,
+  .circuit-line,
+  .circuit-node,
+  .status-cursor {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  
+  .neural-text-glitch {
+    animation: none !important;
+  }
+}
